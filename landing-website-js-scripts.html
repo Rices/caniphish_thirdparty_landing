@@ -1,4 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
     const REDIRECT_TO = 'https://example.com'; // The destination URL once data has been submitted
 
@@ -8,14 +7,10 @@
         uri = responseEndpoint + document.location.search + "&webClick=true";
         console.log(uri);
         if (signInCalled === false) {
-            $.ajax({
-                url: uri,
-                type: 'GET',
-                dataType: 'jsonp',
-                complete: function (response) {
-                    console.log(response); // server response
-                    redirectPage();
-                }
+            fetch(uri).then((response) => {
+                console.log(response); // server response
+            }).finally(() => {
+                redirectPage();
             });
             signInCalled = true;
         }
@@ -55,20 +50,13 @@
     }
 </script>
 <script>
-    $(document).ready(function () {
+    document.addEventListener('DOMContentLoaded', function() {
         uri = responseEndpoint + document.location.search;
         console.log(uri);
-
-        $.ajax({
-            url: uri,
-            type: 'GET',
-            dataType: 'jsonp',
-            success: function (response) {
-                console.log(response); // server response
-            },
-            error: function (response) {
-                console.error("Got error during first callback: " + response);
-            }
-        });
+        fetch(uri)
+            .then(response => console.log)
+            .catch((error) => {
+                console.error("Got error during first callback: ", error);
+            });
     });
 </script>
